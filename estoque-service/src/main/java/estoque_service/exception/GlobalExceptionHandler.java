@@ -40,6 +40,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
 
+    @ExceptionHandler(ExternalServiceException.class)
+    public ResponseEntity<ErrorResponse> tratarServicoExternoIndisponivel(
+            ExternalServiceException exception
+    ) {
+        ErrorResponse erro = new ErrorResponse(
+                LocalDateTime.now(),
+                exception.getMessage(),
+                "Serviço externo indisponível",
+                HttpStatus.SERVICE_UNAVAILABLE.value()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(erro);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> tratarErroDeValidacao(
             MethodArgumentNotValidException exception
